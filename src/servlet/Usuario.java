@@ -207,7 +207,7 @@ public class Usuario extends HttpServlet {
 	}
 	
 	
-	// ------------ Converte o fluxo de dados da imagem para um Array de Bytes ------------------- //
+	// ------------ Converte a entrada do fluxo de dados da imagem para um Array de Bytes ------------------- //
 	
 	private byte[] converteStreamParaByte(InputStream imagem) throws Exception{
 		

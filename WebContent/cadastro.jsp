@@ -100,6 +100,7 @@
 			<tr>
 				<th>ID</th>
 				<th>LOGIN</th>
+				<th>FOTO</th>
 				<th>NOME</th>
 				<th>TELEFONE</th>
 				<th>CEP</th>
@@ -117,6 +118,7 @@
 					<tr>
 						<td style="width: 150px"><c:out value="${user.id}"></c:out></td>
 						<td style="width: 150px"><c:out value="${user.login}"></c:out></td>
+						<td><img src='<c:out value="${user.tempFotoUser}"></c:out>' alt="Imagem User" title="Imagem User" width="32px" height="32px"></td>
 						<td><c:out value="${user.nome}"></c:out></td>
 						<td><c:out value="${user.telefone}"></c:out></td>
 						<td><c:out value="${user.cep}"></c:out></td>

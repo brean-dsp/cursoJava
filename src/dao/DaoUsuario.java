@@ -72,6 +72,9 @@ public class DaoUsuario {
 			beanPortfolio.setCidade(resultSet.getString("cidade"));
 			beanPortfolio.setEstado(resultSet.getString("estado"));
 			beanPortfolio.setIbge(resultSet.getString("ibge"));
+			beanPortfolio.setFotoBase64(resultSet.getString("fotobase64"));
+			beanPortfolio.setContentType(resultSet.getString("contenttype"));
+		
 
 			listar.add(beanPortfolio);
 		}

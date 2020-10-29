@@ -1,3 +1,10 @@
+/*
+ * 
+ * Classe que define o modelo do objeto
+ * 
+ * */
+
+
 package beans;
 
 public class Beanportfolio {
@@ -27,6 +34,8 @@ public class Beanportfolio {
 	private String fotoBase64;
 	
 	private String contentType;
+	
+	private String tempFotoUser;
 
 	// ---------------------------------------------------------
 
@@ -36,21 +45,9 @@ public class Beanportfolio {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public String getFotoBase64() {
-		return fotoBase64;
-	}
-
-	public void setFotoBase64(String fotoBase64) {
-		this.fotoBase64 = fotoBase64;
-	}
-
-	public String getContentType() {
-		return contentType;
-	}
-
-	public void setContentType(String contentType) {
-		this.contentType = contentType;
+	
+	public Long getId() {
+		return id;
 	}
 
 	public String getEstado() {
@@ -101,10 +98,6 @@ public class Beanportfolio {
 		this.ibge = ibge;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
 	public String getLogin() {
 		return login;
 	}
@@ -135,6 +128,29 @@ public class Beanportfolio {
 
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
+	}
+	
+	public String getFotoBase64() {
+		return fotoBase64;
+	}
+
+	public void setFotoBase64(String fotoBase64) {
+		this.fotoBase64 = fotoBase64;
+	}
+	
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
+	
+	public String getTempFotoUser() {
+		
+		tempFotoUser = "data:" + contentType + ";base64," + fotoBase64;
+		
+		return tempFotoUser;
 	}
 
 }
