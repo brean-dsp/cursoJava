@@ -1,8 +1,10 @@
 package servlet;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -35,7 +37,7 @@ public class Usuario extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		
 
 		try {
 
@@ -58,7 +60,41 @@ public class Usuario extends HttpServlet {
 				RequestDispatcher view = request.getRequestDispatcher("cadastro.jsp");
 				request.setAttribute("usuarios", daoUsuario.listar());
 				view.forward(request, response);
+				/*
+				 * 
+				 */
+				/* ----------------------  Início do bloco de codigo para download de imagem ------------------*/
+				/*
+				 * 
+				 * */
+			} else if (acao.equalsIgnoreCase("download")) {
+				Beanportfolio usuario = daoUsuario.consultar(user);
+				if (usuario != null) {
+					response.setHeader("Content-Disposition",
+							"attachment;filename=arquivo." + usuario.getContentType().split("\\/")[1]);
+
+					/*Converte a base 64 da imagem do banco para byte[]*/
+					byte[] imageFotoByte = new Base64().decodeBase64(usuario.getFotoBase64());
+					
+					/*Coloca os bytes em um objeto de entrada para processar*/
+					InputStream is = new ByteArrayInputStream(imageFotoByte);
+					
+					/*Início da resposta para o navegador*/
+					int read = 0;
+					byte[] bytes = new byte[1024];
+					OutputStream os = response.getOutputStream();
+					
+					while ((read = is.read(bytes)) != -1) {
+						os.write(bytes, 0, read);
+						
+					}
+					
+					os.flush();
+					os.close();
+					
+				}
 			}
+			/*-------------------------------- Fim do bloco -------------------------------------------*/
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -70,10 +106,9 @@ public class Usuario extends HttpServlet {
 		super.doPut(req, resp);
 	}
 
-	
-	
-	//--------------- Recebe os dados informados no formulario de cadastro de Usúarios ------------//
-	
+	// --------------- Recebe os dados informados no formulario de cadastro de
+	// Usúarios ------------//
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -115,41 +150,40 @@ public class Usuario extends HttpServlet {
 			usuario.setCidade(cidade);
 			usuario.setEstado(estado);
 			usuario.setIbge(ibge);
-			
 
 			try {
 
-				
-				/* Início --------------------- Upload de imagens e PDF -------------------*/
-				
+				/* Início --------------------- Upload de imagens e PDF ------------------- */
+
 				if (ServletFileUpload.isMultipartContent(request)) {
-					
-					
+
 					Part imagemFoto = request.getPart("foto");
-					
-					String fotoBase64 = new Base64().encodeBase64String(converteStreamParaByte(imagemFoto.getInputStream()));
-					
+
+					String fotoBase64 = new Base64()
+							.encodeBase64String(converteStreamParaByte(imagemFoto.getInputStream()));
+
 					usuario.setFotoBase64(fotoBase64);
 					usuario.setContentType(imagemFoto.getContentType());
-					
-					//-------------  Modelo que pode ser utilizado para upload de imagem --------------//
-					 
-					/*List<FileItem> fileItems = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
-					
-					for (FileItem fileItem : fileItems) {
-						if(fileItem.getFieldName().equals("foto")) {
-							
-							String fotoBase64 = new Base64().encodeBase64String(fileItem.get());
-							String contentType = fileItem.getContentType();
-							usuario.setFotoBase64(fotoBase64);
-							usuario.setContentType(contentType);
-						}
-					}*/
-					
+
+					// ------------- Modelo que pode ser utilizado para upload de imagem
+					// --------------//
+
+					/*
+					 * List<FileItem> fileItems = new ServletFileUpload(new
+					 * DiskFileItemFactory()).parseRequest(request);
+					 * 
+					 * for (FileItem fileItem : fileItems) {
+					 * if(fileItem.getFieldName().equals("foto")) {
+					 * 
+					 * String fotoBase64 = new Base64().encodeBase64String(fileItem.get()); String
+					 * contentType = fileItem.getContentType(); usuario.setFotoBase64(fotoBase64);
+					 * usuario.setContentType(contentType); } }
+					 */
+
 				}
-				
-				/* Fim --------------------- Upload de imagens e PDF -------------------*/
-				
+
+				/* Fim --------------------- Upload de imagens e PDF ------------------- */
+
 				String msg = null;
 				boolean podeInserir = true;
 
@@ -205,20 +239,19 @@ public class Usuario extends HttpServlet {
 		}
 
 	}
-	
-	
-	// ------------ Converte a entrada do fluxo de dados da imagem para um Array de Bytes ------------------- //
-	
-	private byte[] converteStreamParaByte(InputStream imagem) throws Exception{
-		
+
+	// ------------ Converte a entrada do fluxo de dados da imagem para um Array de
+	// Bytes ------------------- //
+
+	private byte[] converteStreamParaByte(InputStream imagem) throws Exception {
+
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		int reads = imagem.read();
 		while (reads != -1) {
 			baos.write(reads);
 			reads = imagem.read();
 		}
-		
-		
+
 		return baos.toByteArray();
 	}
 
